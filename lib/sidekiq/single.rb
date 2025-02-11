@@ -9,9 +9,9 @@ module Sidekiq
   module Single
     class InvalidConfiguration < StandardError; end
 
-    def add_function_to_redis(conn)
+    def self.add_function_to_redis(conn)
       fn = File.read(File.expand_path("../single/lua/lock.lua", __FILE__))
-      conn.call("FUNCTION LOAD REPLACE", fn)
+      conn.call("FUNCTION", "LOAD", "REPLACE", fn)
     end
   end
 end

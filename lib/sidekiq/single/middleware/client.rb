@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sidekiq::Single
   class ClientMiddleware
     include ::Sidekiq::ClientMiddleware

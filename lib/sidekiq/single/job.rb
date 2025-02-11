@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sidekiq::Single
   module Job
     def self.included(job)
@@ -6,7 +8,7 @@ module Sidekiq::Single
 
     module ClassMethods
       def single_options(opts)
-        opts = opts.stringify_keys
+        opts = opts.transform_keys(&:to_s)
         opts["unique_for"] = opts["unique_for"]&.to_i
 
         raise InvalidConfiguration if opts["unique_for"].nil?

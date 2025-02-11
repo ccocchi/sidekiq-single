@@ -1,8 +1,5 @@
-/.bundle/
-/.yardoc
-/_yardoc/
-/coverage/
-/doc/
-/pkg/
-/spec/reports/
-/tmp/
+.ruby-version
+.bundle/
+coverage/
+Gemfile.lock
+*.DS_Store

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sidekiq::Single
   module DefaultItem
     JID = "efe8cddac6a9b1b5a8ca006f"
