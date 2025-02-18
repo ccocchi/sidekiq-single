@@ -16,7 +16,7 @@ module Sidekiq::Single
         sidekiq_options(opts)
       end
 
-      def locked_for?(*args)
+      def performing?(*args)
         meth = get_sidekiq_options["unique_args"]
         item = { "args" => args, "unique_args" => meth }
 

@@ -25,9 +25,9 @@ module Sidekiq::Single
     def acquire_or_discard
       args    = item.key?("wrapped") ? item.dig("args", 0, "arguments") : item["args"]
       method  = item.delete("unique_args")
-      ttl     = item["unique_for"]
       args    = Array(method.call(args)) if method
       digest  = item[DIGEST_KEY] = digest(args)
+      ttl     = calculate_ttl
 
       if @pool.with { |conn| conn.call("SET", digest, item["jid"], "NX", "EX", ttl) }
         yield
@@ -52,6 +52,14 @@ module Sidekiq::Single
       sha256 = Digest::SHA256.new
       ary.each { |e| sha256 << e.to_s }
       sha256.hexdigest
+    end
+
+    def calculate_ttl
+      ttl = item["unique_for"]
+      if (at = item["at"])
+        ttl = (ttl + (at - Time.now.to_f)).ceil
+      end
+      ttl
     end
 
     def handle_conflict # noop

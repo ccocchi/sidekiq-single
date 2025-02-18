@@ -50,6 +50,17 @@ module Sidekiq::Single
       assert_equal JID, @@pool.with { |conn| conn.call("GET", @digest) }
     end
 
+    def test_acquiring_lock_with_interval
+      now = Time.now.to_f
+      @item["at"] = now + 100
+
+      res = @lock.acquire_or_discard { true }
+
+      assert res
+      assert_item_locked
+      assert_in_epsilon 105, @@pool.with { |conn| conn.call("TTL", @digest) }, 0.1
+    end
+
     def test_is_fastened
       refute @lock.fastened?
 

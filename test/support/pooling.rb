@@ -18,6 +18,8 @@ module Sidekiq::Single
       end
 
       def reset
+        return if @calls_count == 0
+
         @calls_count = 0
         @pool.with { |conn| conn.call("FLUSHDB") }
       end
