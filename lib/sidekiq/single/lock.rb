@@ -36,12 +36,24 @@ module Sidekiq::Single
       end
     end
 
+    # Executes the given block and releases the lock.
+    #
+    # Lock is not release when underlying block raises, to ensure retries
+    # are still done with the item locked. When all retries fail, or when
+    # there's no retry at all, the lock is released by the `Reaper` added
+    # as a death handler to Sidekiq.
+    #
+    # @return [Object] the given block's return value
+    #
     def perform_and_release
       res = yield
       release
       res
     end
 
+    # Releases the lock only if its value matches our job's id, to ensure
+    # we're not releasing another job's lock.
+    #
     def release
       @pool.with { |conn| conn.call("FCALL", "single_release_lock", 1, item["digest"], item["jid"]) }
     end
