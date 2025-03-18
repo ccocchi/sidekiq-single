@@ -32,15 +32,5 @@ module Sidekiq::Single
         DummyJob.single_options unique_for: nil
       end
     end
-
-    def test_is_performing
-      DummyJob.single_options unique_for: 10, unique_args: Proc.new(&:itself)
-      digest = "880f8927d939cbfb77797b055dadaf1d18abe5a8c7514e2cfcf79c2581924979"
-
-      refute DummyJob.performing?("id", 1234)
-
-      @@pool.with { |conn| conn.call("SET", digest, "foo") }
-      assert DummyJob.performing?("id", 1234)
-    end
   end
 end
