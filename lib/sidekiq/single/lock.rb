@@ -22,6 +22,10 @@ module Sidekiq::Single
       @pool.with { |conn| conn.call("EXISTS", digest) } > 0
     end
 
+    # Tries to acquire the lock. In case of success, executes the given block
+    # otherwise calls the `handle_conflict` method which by default does
+    # nothing.
+    #
     def acquire_or_discard
       args    = item.key?("wrapped") ? item.dig("args", 0, "arguments") : item["args"]
       method  = item.delete("unique_args")
@@ -62,6 +66,7 @@ module Sidekiq::Single
 
     def digest(ary)
       sha256 = Digest::SHA256.new
+      sha256 << item["class"]
       ary.each { |e| sha256 << e.to_s }
       sha256.hexdigest
     end

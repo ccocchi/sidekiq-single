@@ -7,8 +7,8 @@ module Sidekiq::Single
     def setup
       super
 
-      @item = { "jid" => JID, "unique_for" => 5, "args" => ["id", 1234] }
-      @digest = "880f8927d939cbfb77797b055dadaf1d18abe5a8c7514e2cfcf79c2581924979"
+      @item = { "jid" => JID, "unique_for" => 5, "args" => ["id", 1234], "class" => "SomeJob" }
+      @digest = "d2f3fafe495e984694afeb3d08407620320ff285d24158867f730fa2228146bd"
     end
 
     private def with_item_locked(value: JID)

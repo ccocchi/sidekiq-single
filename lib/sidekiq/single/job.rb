@@ -18,7 +18,7 @@ module Sidekiq::Single
 
       def performing?(*args)
         meth = get_sidekiq_options["unique_args"]
-        item = { "args" => args, "unique_args" => meth }
+        item = { "args" => args, "unique_args" => meth, "class" => name }
 
         Lock.new(item).fastened?
       end

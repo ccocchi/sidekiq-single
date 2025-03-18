@@ -30,7 +30,7 @@ module Sidekiq::Single
 
     def test_acquiring_lock_with_custom_args_method
       @item["unique_args"] = ->(args) { args.reverse }
-      digest = "79bdcbab15c785bcaed3d5de5f97a6d97283ad4b0d70bb08ef5e079459521c9d"
+      digest = "825ea1dac8fb6633079814fa0e70e267574e6fbed9a669c06f1533e2f48bf71d"
 
       res = @lock.acquire_or_discard { true }
 
